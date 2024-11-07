@@ -1,4 +1,4 @@
-#start here
+# Start here
 git clone https://github.com/AliQat/SpoofyreZ.git
 
 git checkout feature/feature-name
