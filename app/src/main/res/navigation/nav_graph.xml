@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.mobileapp.spoofyrez.ui.main.MainFragment"
+        android:label="MainFragment">
+        <action
+            android:id="@+id/action_main_to_help"
+            app:destination="@id/helpFragment" />
+        <action
+            android:id="@+id/action_main_to_parameters"
+            app:destination="@id/parametersFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.mobileapp.spoofyrez.ui.main.HelpFragment"
+        android:label="HelpFragment">
+        <action
+            android:id="@+id/action_help_to_main"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/parametersFragment"
+        android:name="com.mobileapp.spoofyrez.ui.parameters.ParametersFragment"
+        android:label="ParametersFragment">
+        <action
+            android:id="@+id/action_parameters_to_results"
+            app:destination="@id/resultsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/resultsFragment"
+        android:name="com.mobileapp.spoofyrez.ui.results.ResultsFragment"
+        android:label="ResultsFragment" />
+</navigation>
