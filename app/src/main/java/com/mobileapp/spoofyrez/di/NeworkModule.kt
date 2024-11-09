@@ -1,6 +1,7 @@
 package com.mobileapp.spoofyrez.di
 
 import android.util.Log
+import com.mobileapp.spoofyrez.BuildConfig
 import com.mobileapp.spoofyrez.data.api.SpotifyService
 import dagger.Module
 import dagger.Provides
@@ -24,8 +25,9 @@ object NetworkModule {
     private const val BASE_URL = "https://api.spotify.com/"
     private const val AUTH_URL = "https://accounts.spotify.com/api/token"
 
-    private const val CLIENT_ID = ""
-    private const val CLIENT_SECRET = ""
+    // Ask me (Ali) on how to get these, your app should crash if you do not have them set up
+    private val CLIENT_ID = BuildConfig.SPOTIFY_CLIENT_ID
+    private val CLIENT_SECRET = BuildConfig.SPOTIFY_CLIENT_SECRET
 
     @Provides
     @Singleton
