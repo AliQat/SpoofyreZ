@@ -39,5 +39,28 @@
     <fragment
         android:id="@+id/resultsFragment"
         android:name="com.mobileapp.spoofyrez.ui.results.ResultsFragment"
-        android:label="ResultsFragment" />
+        android:label="ResultsFragment">
+        <argument
+            android:name="danceability"
+            app:argType="integer"/>
+        <argument
+            android:name="energy"
+            app:argType="integer"/>
+        <argument
+            android:name="speechiness"
+            app:argType="integer"/>
+        <argument
+            android:name="acousticness"
+            app:argType="integer"/>
+        <argument
+            android:name="instrumentalness"
+            app:argType="integer"/>
+        <argument
+            android:name="valence"
+            app:argType="integer"/>
+        <argument
+            android:name="tempo"
+            app:argType="integer"/>
+    </fragment>
+
 </navigation>

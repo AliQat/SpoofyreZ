@@ -9,4 +9,12 @@
     <string name="parameters_screen">Parameters Screen</string>
     <string name="p_screen">Make this look not like shit</string>
     <string name="results">Results</string>
+    <string name="parameters_text_danceability">Danceability</string>
+    <string name="parameters_text_energy">Energy</string>
+    <string name="parameters_text_speechiness">Speechiness</string>
+    <string name="parameters_text_acousticness">Acousticness</string>
+    <string name="parameters_text_instrumentalness">Instrumentalness</string>
+    <string name="parameters_text_valence">Valence</string>
+    <string name="parameters_text_tempo">Tempo</string>
+    <string name="parameters_button_apply">Apply</string>
 </resources>
