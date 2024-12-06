@@ -6,11 +6,23 @@ import androidx.navigation.fragment.NavHostFragment
 import com.mobileapp.spoofyrez.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // We will start writing our code here.
+    }
+
+    private fun connected() {
+        // Then we will write some more code here.
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Aaand we will finish off here.
     }
 }

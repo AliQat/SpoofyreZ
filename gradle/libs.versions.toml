@@ -1,6 +1,8 @@
 [versions]
 agp = "8.6.0"
 appcompatVersion = "1.6.1"
+auth = "1.2.5"
+browser = "1.0.0"
 constraintlayoutVersion = "2.1.4"
 coreKtxVersion = "1.12.0"
 hiltAndroid = "2.50"
@@ -19,11 +21,13 @@ retrofit = "2.9.0"
 
 [libraries]
 androidx-appcompat-v161 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
+androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
 androidx-constraintlayout-v214 = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-ktx-v1120 = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragment" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragment" }
+auth = { module = "com.spotify.android:auth", version.ref = "auth" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }

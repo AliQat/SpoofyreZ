@@ -40,18 +40,19 @@ android {
     }
 }
 
+
 dependencies {
     implementation(libs.androidx.core.ktx.v1120)
     implementation(libs.androidx.appcompat.v161)
     implementation(libs.material.v1110)
     implementation(libs.androidx.constraintlayout.v214)
-
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+
+    implementation (libs.auth)
+    implementation (libs.androidx.browser)
 }
