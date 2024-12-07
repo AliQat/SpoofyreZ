@@ -7,18 +7,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
+import com.mobileapp.spoofyrez.data.repository.SongRepository
 import com.mobileapp.spoofyrez.databinding.FragmentResultsBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ResultsFragment : Fragment() {
     private var _binding: FragmentResultsBinding? = null
     private val binding get() = _binding!!
     private val client = OkHttpClient()
+
+    @Inject
+    lateinit var songRepository: SongRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,28 +42,40 @@ class ResultsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            songRepository.currentTrack.collectLatest { track ->
+                track?.let {
+                    displayTrackInfo()
+                }
+            }
+        }
+
+        // If parameters from `feature/parameters` are needed:
         val res = ResultsFragmentArgs.fromBundle(requireArguments()).result
         fetchMbid("Cemetery Gates", "Pantera")
     }
 
-    private suspend fun getFirstAvailableCoverArt(mbids: List<String>): String {
-        for (mbid in mbids) {
-            val coverArtUrl = getCoverArtUrl(mbid)
-            if (coverArtUrl.isNotEmpty()) {
-                Log.d("eee", coverArtUrl)
-                return coverArtUrl
-            }
-        }
-        return ""
-    }
+    private suspend fun displayTrackInfo() {
+        binding.tvSongName.text = songRepository.getSongName()
+        binding.tvArtistName.text = songRepository.getArtistName()
+        binding.tvPopularity.text = "Popularity: ${songRepository.getPopularity()}"
 
+        val albumArtUrl = songRepository.getAlbumArt(SongRepository.ImageSize.MEDIUM)
+        context?.let { ctx ->
+            Glide.with(ctx)
+                .load(albumArtUrl)
+                .centerCrop()
+                .into(binding.ivAlbumArt)
+        }
+    }
 
     private fun fetchMbid(songName: String, artistName: String) {
         lifecycleScope.launch {
-            val mbid = getReleaseMbids(songName, artistName)
-            getFirstAvailableCoverArt(mbid)
-            if (mbid.isNotEmpty()) {
-                Log.d("MBID", "Fetched MBID: $mbid")
+            val mbids = getReleaseMbids(songName, artistName)
+            val coverArtUrl = getFirstAvailableCoverArt(mbids)
+            if (mbids.isNotEmpty()) {
+                Log.d("MBID", "Fetched MBID: $mbids")
+                Log.d("CoverArt", "Cover art URL: $coverArtUrl")
             } else {
                 Log.d("MBID", "No MBID found.")
             }
@@ -82,14 +104,14 @@ class ResultsFragment : Fragment() {
                     if (responseBody != null) {
                         val json = JSONObject(responseBody)
                         val recordings = json.optJSONArray("recordings")
-                        if (recordings != null && recordings.length() > 0) {
-                            val recording = recordings.getJSONObject(0)
-                            val releases = recording.optJSONArray("releases")
+                        if (recordings != null) {
                             val mbids = mutableListOf<String>()
-                            if (releases != null) {
-                                for (i in 0 until releases.length()) {
-                                    val release = releases.getJSONObject(i)
-                                    mbids.add(release.optString("id"))
+                            for (i in 0 until recordings.length()) {
+                                val releases = recordings.getJSONObject(i).optJSONArray("releases")
+                                if (releases != null) {
+                                    for (j in 0 until releases.length()) {
+                                        mbids.add(releases.getJSONObject(j).optString("id"))
+                                    }
                                 }
                             }
                             return@withContext mbids
@@ -105,6 +127,16 @@ class ResultsFragment : Fragment() {
         }
     }
 
+    private suspend fun getFirstAvailableCoverArt(mbids: List<String>): String {
+        for (mbid in mbids) {
+            val coverArtUrl = getCoverArtUrl(mbid)
+            if (coverArtUrl.isNotEmpty()) {
+                return coverArtUrl
+            }
+        }
+        return ""
+    }
+
     private suspend fun getCoverArtUrl(releaseMbid: String): String {
         val url = "https://coverartarchive.org/release/$releaseMbid/front"
 
@@ -117,7 +149,7 @@ class ResultsFragment : Fragment() {
 
                 client.newCall(request).execute().use { response ->
                     if (response.isSuccessful) {
-                        return@withContext url // The URL itself serves as the image source.
+                        return@withContext url
                     } else {
                         Log.e("CoverArt", "Error fetching cover art: ${response.code}")
                         return@withContext ""
@@ -129,10 +161,6 @@ class ResultsFragment : Fragment() {
             }
         }
     }
-
-
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()

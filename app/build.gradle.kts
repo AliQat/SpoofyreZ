@@ -6,6 +6,10 @@ plugins {
     id("androidx.navigation.safeargs")
 }
 
+fun getSecret(key: String): String {
+    return providers.gradleProperty(key).orNull ?: System.getenv(key) ?: ""
+}
+
 android {
     namespace = "com.mobileapp.spoofyrez"
     compileSdk = 34
@@ -21,7 +25,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "SPOTIFY_CLIENT_ID", "\"${getSecret("spotify.client.id")}\"")
+            buildConfigField("String", "SPOTIFY_CLIENT_SECRET", "\"${getSecret("spotify.client.secret")}\"")
+        }
         release {
+            buildConfigField("String", "SPOTIFY_CLIENT_ID", "\"${getSecret("spotify.client.id")}\"")
+            buildConfigField("String", "SPOTIFY_CLIENT_SECRET", "\"${getSecret("spotify.client.secret")}\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -38,6 +48,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -53,6 +64,11 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
+    implementation(libs.glide)
+    implementation(libs.androidx.monitor)
+    implementation(libs.androidx.junit.ktx)
+    testImplementation(libs.junit.junit)
+    kapt(libs.compiler)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.glide)
