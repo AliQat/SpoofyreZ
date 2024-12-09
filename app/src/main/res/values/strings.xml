@@ -17,4 +17,6 @@
     <string name="parameters_text_valence">Valence</string>
     <string name="parameters_text_tempo">Tempo</string>
     <string name="parameters_button_apply">Apply</string>
+    <string name="hTitle">Enter Song Title</string>
+    <string name="hArtist">Enter Artist Name</string>
 </resources>

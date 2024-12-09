@@ -1,165 +1,107 @@
 package com.mobileapp.spoofyrez.ui.results
 
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import androidx.fragment.app.viewModels
-import com.bumptech.glide.Glide
-import com.mobileapp.spoofyrez.data.repository.SongRepository
+import androidx.navigation.fragment.navArgs
+import com.mobileapp.spoofyrez.R
 import com.mobileapp.spoofyrez.databinding.FragmentResultsBinding
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.json.JSONObject
-import javax.inject.Inject
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.bumptech.glide.Glide
 
-@AndroidEntryPoint
 class ResultsFragment : Fragment() {
     private var _binding: FragmentResultsBinding? = null
     private val binding get() = _binding!!
     private val client = OkHttpClient()
 
-    @Inject
-    lateinit var songRepository: SongRepository
+    private val args: ResultsFragmentArgs by navArgs()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentResultsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            songRepository.currentTrack.collectLatest { track ->
-                track?.let {
-                    displayTrackInfo()
+        // Deserializes the string
+        val jsonString = arguments?.getString("result")
+        val gson = Gson()
+        val type = object : TypeToken<MutableList<MutableList<String>>>() {}.type
+        val songs: MutableList<MutableList<String>> = gson.fromJson(jsonString, type)
+
+        // Gets the scroll layout
+        val parentScrollView = binding.root
+        val context = requireContext()
+        val parentLinearLayout = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        }
+        parentScrollView.addView(parentLinearLayout)
+
+        for (song in songs) {
+            val title = song[0]
+            val artist = song[1]
+            val cover = song[2]
+            val id = song[3]
+
+            val childLinearLayout = LinearLayout(context).apply {
+                orientation = LinearLayout.HORIZONTAL
+                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply{
+                    setMargins(0,0,0,10)
+                }
+                setPadding(10,10,10,16)
+                setBackgroundColor(Color.DKGRAY)
+            }
+            val albumCoverImageView = ImageView(context).apply {
+                layoutParams = LinearLayout.LayoutParams(300, 300).apply {
+                    setMargins(20, 20, 20, 20)
                 }
             }
-        }
-
-        // If parameters from `feature/parameters` are needed:
-        val res = ResultsFragmentArgs.fromBundle(requireArguments()).result
-        fetchMbid("Cemetery Gates", "Pantera")
-    }
-
-    private suspend fun displayTrackInfo() {
-        binding.tvSongName.text = songRepository.getSongName()
-        binding.tvArtistName.text = songRepository.getArtistName()
-        binding.tvPopularity.text = "Popularity: ${songRepository.getPopularity()}"
-
-        val albumArtUrl = songRepository.getAlbumArt(SongRepository.ImageSize.MEDIUM)
-        context?.let { ctx ->
-            Glide.with(ctx)
-                .load(albumArtUrl)
-                .centerCrop()
-                .into(binding.ivAlbumArt)
-        }
-    }
-
-    private fun fetchMbid(songName: String, artistName: String) {
-        lifecycleScope.launch {
-            val mbids = getReleaseMbids(songName, artistName)
-            val coverArtUrl = getFirstAvailableCoverArt(mbids)
-            if (mbids.isNotEmpty()) {
-                Log.d("MBID", "Fetched MBID: $mbids")
-                Log.d("CoverArt", "Cover art URL: $coverArtUrl")
-            } else {
-                Log.d("MBID", "No MBID found.")
+            Glide.with(context)
+                .load(cover)
+                .placeholder(R.drawable.ic_launcher_background) // Optional placeholder
+                .error(R.drawable.ic_launcher_background) // Optional error image
+                .into(albumCoverImageView)
+            val childLinearLayoutForTexts = LinearLayout(context).apply {
+                orientation = LinearLayout.VERTICAL
+                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1F)
             }
-        }
-    }
-
-    private suspend fun getReleaseMbids(songName: String, artistName: String): List<String> {
-        val baseUrl = "https://musicbrainz.org/ws/2/recording/"
-        val query = "?query=recording:$songName AND artist:$artistName&fmt=json"
-        val url = baseUrl + query.replace(" ", "%20")
-
-        return withContext(Dispatchers.IO) {
-            try {
-                val request = Request.Builder()
-                    .url(url)
-                    .header("User-Agent", "YourAppName/1.0 (your-email@example.com)")
-                    .build()
-
-                client.newCall(request).execute().use { response ->
-                    if (!response.isSuccessful) {
-                        Log.e("MBID", "Error: ${response.code}")
-                        return@withContext emptyList()
-                    }
-
-                    val responseBody = response.body?.string()
-                    if (responseBody != null) {
-                        val json = JSONObject(responseBody)
-                        val recordings = json.optJSONArray("recordings")
-                        if (recordings != null) {
-                            val mbids = mutableListOf<String>()
-                            for (i in 0 until recordings.length()) {
-                                val releases = recordings.getJSONObject(i).optJSONArray("releases")
-                                if (releases != null) {
-                                    for (j in 0 until releases.length()) {
-                                        mbids.add(releases.getJSONObject(j).optString("id"))
-                                    }
-                                }
-                            }
-                            return@withContext mbids
-                        }
-                    }
-                    Log.e("MBID", "No releases found.")
-                    emptyList()
+            val titleTextView = TextView(context).apply {
+                text = title // Set the text
+                textSize = 25f // Set text size in sp (use float)
+                setTextColor(Color.WHITE)
+                setTypeface(typeface, Typeface.BOLD) // Set text style to bold
+                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+                    setMargins(0, 0, 0, 4)
                 }
-            } catch (e: Exception) {
-                Log.e("MBID", "Error fetching release MBIDs", e)
-                emptyList()
             }
-        }
-    }
-
-    private suspend fun getFirstAvailableCoverArt(mbids: List<String>): String {
-        for (mbid in mbids) {
-            val coverArtUrl = getCoverArtUrl(mbid)
-            if (coverArtUrl.isNotEmpty()) {
-                return coverArtUrl
+            val artistTextView = TextView(context).apply {
+                text = artist
+                textSize = 20f
+                setTextColor(Color.WHITE)
+                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                )
             }
+
+            parentLinearLayout.addView(childLinearLayout)
+            childLinearLayout.addView(albumCoverImageView)
+            childLinearLayout.addView(childLinearLayoutForTexts)
+            childLinearLayoutForTexts.addView(titleTextView)
+            childLinearLayoutForTexts.addView(artistTextView)
         }
-        return ""
-    }
 
-    private suspend fun getCoverArtUrl(releaseMbid: String): String {
-        val url = "https://coverartarchive.org/release/$releaseMbid/front"
 
-        return withContext(Dispatchers.IO) {
-            try {
-                val request = Request.Builder()
-                    .url(url)
-                    .header("User-Agent", "YourAppName/1.0 (your-email@example.com)")
-                    .build()
-
-                client.newCall(request).execute().use { response ->
-                    if (response.isSuccessful) {
-                        return@withContext url
-                    } else {
-                        Log.e("CoverArt", "Error fetching cover art: ${response.code}")
-                        return@withContext ""
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e("CoverArt", "Error fetching cover art", e)
-                ""
-            }
-        }
     }
 
     override fun onDestroyView() {

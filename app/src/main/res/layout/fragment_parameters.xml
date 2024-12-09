@@ -1,189 +1,71 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#202427"
     android:padding="16dp">
 
-
+    <!-- Title TextView -->
     <TextView
-        android:id="@+id/textView_danceability"
+        android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/parameters_text_danceability"
-        android:textSize="16sp"
+        android:text="@string/app_name"
         android:textColor="#FFFFFF"
+        android:textSize="36sp"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintBottom_toTopOf="@id/createPlaylist"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.5" />
 
-    <SeekBar
-        android:id="@+id/seekBar_danceability"
-        android:layout_width="0dp"
+    <!-- Song Title EditText -->
+    <EditText
+        android:id="@+id/songTitleTextView"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:max="100"
-        android:progressTint="#03DAC6"
-        app:layout_constraintTop_toBottomOf="@id/textView_danceability"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
-
-
-    <TextView
-        android:id="@+id/textView_energy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/parameters_text_energy"
-        android:textSize="16sp"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/seekBar_danceability"
+        android:textColorHint="#B0B0B0"
+        android:inputType="text"
+        android:hint="@string/hTitle"
+        android:paddingVertical="15dp"
+        android:backgroundTint="#FFFFFF"
+
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <SeekBar
-        android:id="@+id/seekBar_energy"
-        android:layout_width="0dp"
+    <!-- Artist EditText -->
+    <EditText
+        android:id="@+id/artistTextView"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:max="100"
-        android:progressTint="#03DAC6"
-        app:layout_constraintTop_toBottomOf="@id/textView_energy"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
-
-
-    <TextView
-        android:id="@+id/textView_speechiness"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/parameters_text_speechiness"
-        android:textSize="16sp"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/seekBar_energy"
+        android:textColorHint="#B0B0B0"
+        android:inputType="text"
+        android:hint="@string/hArtist"
+        android:paddingVertical="15dp"
+        android:backgroundTint="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/songTitleTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <SeekBar
-        android:id="@+id/seekBar_speechiness"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:max="100"
-        android:progressTint="#03DAC6"
-        app:layout_constraintTop_toBottomOf="@id/textView_speechiness"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
-
-
-    <TextView
-        android:id="@+id/textView_acousticness"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/parameters_text_acousticness"
-        android:textSize="16sp"
-        android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/seekBar_speechiness"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
-
-    <SeekBar
-        android:id="@+id/seekBar_acousticness"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:max="100"
-        android:progressTint="#03DAC6"
-        app:layout_constraintTop_toBottomOf="@id/textView_acousticness"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
-
-
-    <TextView
-        android:id="@+id/textView_instrumentalness"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/parameters_text_instrumentalness"
-        android:textSize="16sp"
-        android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/seekBar_acousticness"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
-
-    <SeekBar
-        android:id="@+id/seekBar_instrumentalness"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:max="100"
-        android:progressTint="#03DAC6"
-        app:layout_constraintTop_toBottomOf="@id/textView_instrumentalness"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
-
-
-    <TextView
-        android:id="@+id/textView_valence"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/parameters_text_valence"
-        android:textSize="16sp"
-        android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/seekBar_instrumentalness"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
-
-    <SeekBar
-        android:id="@+id/seekBar_valence"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:max="100"
-        android:progressTint="#03DAC6"
-        app:layout_constraintTop_toBottomOf="@id/textView_valence"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
-
-
-    <TextView
-        android:id="@+id/textView_tempo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/parameters_text_tempo"
-        android:textSize="16sp"
-        android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/seekBar_valence"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
-
-    <SeekBar
-        android:id="@+id/seekBar_tempo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:max="100"
-        android:progressTint="#03DAC6"
-        app:layout_constraintTop_toBottomOf="@id/textView_tempo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
-
-
+    <!-- Get Started Button -->
     <Button
-        android:id="@+id/btnFindSimilar"
-        android:layout_width="wrap_content"
+        android:id="@+id/createPlaylist"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="@string/parameters_button_apply"
-        android:backgroundTint="#BB86FC"
+        android:text="@string/get_started"
+        android:backgroundTint="#4CAF50"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/seekBar_tempo"
+        android:textSize="18sp"
+        android:paddingVertical="12dp"
+        app:layout_constraintTop_toBottomOf="@id/artistTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
