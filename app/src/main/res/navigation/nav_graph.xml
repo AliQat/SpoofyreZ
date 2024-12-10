@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_parameters_to_results"
             app:destination="@id/resultsFragment" />
+        <action
+            android:id="@+id/action_parametersFragment_to_helpFragment"
+            app:destination="@id/helpFragment" />
     </fragment>
 
     <fragment
@@ -43,6 +46,9 @@
         <argument
             android:name="result"
             app:argType="string"/>
+        <action
+            android:id="@+id/action_resultsFragment_to_parametersFragment"
+            app:destination="@id/parametersFragment" />
 
 
     </fragment>

@@ -20,6 +20,7 @@ import okhttp3.Request
 import okhttp3.HttpUrl
 import org.json.JSONObject
 import com.google.gson.Gson
+import com.mobileapp.spoofyrez.R
 
 class ParametersFragment : Fragment() {
     private var _binding: FragmentParametersBinding? = null
@@ -70,9 +71,6 @@ class ParametersFragment : Fragment() {
                         val jsonObject = JSONObject(responseBody)
                         val similarTracks = jsonObject.optJSONObject("similartracks")
                         val tracks = similarTracks?.optJSONArray("track")
-
-
-
 
                         val result = if (tracks != null && tracks.length() > 0) {
                             val stringBuilder = StringBuilder()
@@ -167,8 +165,6 @@ class ParametersFragment : Fragment() {
 
     private fun setupClickListeners() {
         binding.createPlaylist.setOnClickListener {
-            Toast.makeText(context, "Generating Playlist", Toast.LENGTH_LONG).show()
-
             val songTitle = binding.songTitleTextView.text.toString()
             val artistName = binding.artistTextView.text.toString()
 
@@ -178,9 +174,18 @@ class ParametersFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            binding.createPlaylist.isEnabled = false
+
             // Pass the extracted song title and artist name into getSimilarTracks
             getSimilarTracks(songTitle, artistName) { result ->
                 val songs = result.split("\n").filter { it.isNotEmpty() && it.contains(" --- ") }
+                // Check for songs
+                if (songs.isEmpty()) {
+                    Toast.makeText(context, "No Songs Found\nPlease try a different song", Toast.LENGTH_SHORT).show()
+                    binding.createPlaylist.isEnabled = true
+                } else {
+                    Toast.makeText(context, "Generating Playlist", Toast.LENGTH_LONG).show()
+                }
                 val product = mutableListOf<MutableList<String>>()
                 var completedCount = 0
 
@@ -200,11 +205,13 @@ class ParametersFragment : Fragment() {
 
                             // Check if all tasks are completed
                             if (completedCount == songs.size - 1) {
+
+
+
                                 val gson = Gson()
                                 val serList = gson.toJson(product)
                                 val action = ParametersFragmentDirections.actionParametersToResults(serList)
                                 findNavController().navigate(action)
-//                                Log.d("FinalProduct", product.joinToString("\n") { it.joinToString(" | ") })
                             }
                         }
                     } else {
@@ -212,6 +219,10 @@ class ParametersFragment : Fragment() {
                     }
                 }
             }
+        }
+        // Help button
+        binding.btnHelp.setOnClickListener {
+            findNavController().navigate(R.id.action_parametersFragment_to_helpFragment)
         }
     }
 

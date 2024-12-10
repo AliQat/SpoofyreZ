@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mobileapp.spoofyrez.R
 import com.mobileapp.spoofyrez.databinding.FragmentResultsBinding
@@ -34,33 +36,31 @@ class ResultsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.fixedButton.setOnClickListener {
+            findNavController().navigate(R.id.action_resultsFragment_to_parametersFragment)
+        }
+
         // Deserializes the string
         val jsonString = arguments?.getString("result")
         val gson = Gson()
         val type = object : TypeToken<MutableList<MutableList<String>>>() {}.type
         val songs: MutableList<MutableList<String>> = gson.fromJson(jsonString, type)
 
-        // Gets the scroll layout
-        val parentScrollView = binding.root
+        // Reference to scroll content layout
+        val parentLinearLayout = view.findViewById<LinearLayout>(R.id.scrollContent)
         val context = requireContext()
-        val parentLinearLayout = LinearLayout(context).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        }
-        parentScrollView.addView(parentLinearLayout)
 
         for (song in songs) {
             val title = song[0]
             val artist = song[1]
             val cover = song[2]
-            val id = song[3]
 
             val childLinearLayout = LinearLayout(context).apply {
                 orientation = LinearLayout.HORIZONTAL
-                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply{
-                    setMargins(0,0,0,10)
+                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+                    setMargins(0, 0, 0, 10)
                 }
-                setPadding(10,10,10,16)
+                setPadding(10, 10, 10, 16)
                 setBackgroundColor(Color.DKGRAY)
             }
             val albumCoverImageView = ImageView(context).apply {
@@ -90,8 +90,7 @@ class ResultsFragment : Fragment() {
                 text = artist
                 textSize = 20f
                 setTextColor(Color.WHITE)
-                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
-                )
+                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             }
 
             parentLinearLayout.addView(childLinearLayout)
@@ -101,8 +100,8 @@ class ResultsFragment : Fragment() {
             childLinearLayoutForTexts.addView(artistTextView)
         }
 
-
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

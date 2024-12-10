@@ -2,21 +2,23 @@
     <string name="app_name">SpoofyreZ</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="instructions_for_dummy">1. Enter a Spotify song URL\n\n2. Adjust parameters to find similar songs\n\n3. View and save your personalized playlist</string>
-    <string name="bmain">Back to Main</string>
+    <string name="instructions_for_dummy">1.Tap the Get Started button to go to a screen where you can enter a song title and the name of the artist.\n\n
+2.After entering the song title and artist name, tap the Generate Playlist button to see a list of songs similar to the one you entered.\n\n
+3.Tap the Search Again button to return to the main screen, where you can start over and try a different song.</string>
+    <string name="bmain">Back</string>
     <string name="get_started">Get Started</string>
     <string name="help">Help</string>
     <string name="parameters_screen">Parameters Screen</string>
     <string name="p_screen">Make this look not like shit</string>
     <string name="results">Results</string>
-    <string name="parameters_text_danceability">Danceability</string>
-    <string name="parameters_text_energy">Energy</string>
-    <string name="parameters_text_speechiness">Speechiness</string>
-    <string name="parameters_text_acousticness">Acousticness</string>
-    <string name="parameters_text_instrumentalness">Instrumentalness</string>
-    <string name="parameters_text_valence">Valence</string>
-    <string name="parameters_text_tempo">Tempo</string>
-    <string name="parameters_button_apply">Apply</string>
     <string name="hTitle">Enter Song Title</string>
     <string name="hArtist">Enter Artist Name</string>
+    <string name="generatePlaylist">Generate Playlist</string>
+    <string name="returnButton">Choose Another Song</string>
+    <string name="howTo">How to Use SpoofyreZ</string>
+    <string name="Step1">1. To get started with the SpoofyreZ, tap the green Get Started button. This will take you to the next screen.</string>
+    <string name="Step2">2. On the next screen, enter the song title in the top box and the artist name in the bottom box. Then, tap the green Generate Playlist button. A message will appear, letting you know the playlist is being generated. Wait for up to three seconds, and you will be directed to the next screen displaying your playlist.</string>
+    <string name="Step3">3. On the results screen, you will see your playlist. It will feature song cover art along with the names of songs and artists we recommend based on the song you provided as a reference. If you want to search using a different song, tap the green Choose Another Song button. This will bring you back to the search screen.</string>
+    <string name="Step4">Warning 1. If you press the green Generate Playlist button without entering a song title and artist name, a notification will appear prompting you to fill in both text boxes.</string>
+    <string name="Step5">Warning 2. If the song you provided as a reference does not have any matching songs to generate a playlist, a notification will inform you of this. In such cases, we recommend trying a different song to search for.</string>
 </resources>
