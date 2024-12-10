@@ -6,7 +6,6 @@
     android:background="#202427"
     android:padding="16dp">
 
-    <!-- Title TextView -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -15,6 +14,7 @@
         android:textColor="#FFFFFF"
         android:textSize="36sp"
         android:textStyle="bold"
+        android:layout_marginBottom="300dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +22,6 @@
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintVertical_bias="0.5" />
 
-    <!-- Song Title EditText -->
     <EditText
         android:id="@+id/songTitleTextView"
         android:layout_width="250dp"
@@ -33,12 +32,11 @@
         android:hint="@string/hTitle"
         android:paddingVertical="15dp"
         android:backgroundTint="#FFFFFF"
-
+        android:layout_marginTop="100dp"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Artist EditText -->
     <EditText
         android:id="@+id/artistTextView"
         android:layout_width="250dp"
@@ -53,19 +51,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Get Started Button -->
     <Button
         android:id="@+id/createPlaylist"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="@string/get_started"
+        android:layout_marginBottom="156dp"
         android:backgroundTint="#4CAF50"
+        android:paddingVertical="12dp"
+        android:text="@string/generatePlaylist"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
-        android:paddingVertical="12dp"
-        app:layout_constraintTop_toBottomOf="@id/artistTextView"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnHelp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#2196F3"
+        android:paddingVertical="12dp"
+        android:text="@string/help"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/createPlaylist"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
